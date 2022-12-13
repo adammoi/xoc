@@ -58,13 +58,6 @@ resdb="${green}ONLINE${NC}"
 else
 resdb="${red}OFFLINE${NC}"
 fi
-
-slow=$(service client-sldns status | grep active | cut -d ' ' $stat)
-if [ "$slow" = "active" ]; then
-reslow="${green}ONLINE${NC}"
-else
-reslow="${red}OFFLINE${NC}"
-fi
  
 v2r=$(service $rekk status | grep active | cut -d ' ' $stat)
 if [ "$v2r" = "active" ]; then
@@ -106,7 +99,6 @@ echo -e " $COLOR1│${NC}  • SSH & VPN                        • $ressh"
 echo -e " $COLOR1│${NC}  • SQUID                            • $ressq"
 echo -e " $COLOR1│${NC}  • DROPBEAR                         • $resdb"
 echo -e " $COLOR1│${NC}  • NGINX                            • $resnx"
-echo -e " $COLOR1│${NC}  • SLOWDNS                          • $reslow"
 echo -e " $COLOR1│${NC}  • WS DROPBEAR                      • $rews"
 echo -e " $COLOR1│${NC}  • WS STUNNEL                       • $rews2"
 echo -e " $COLOR1│${NC}  • STUNNEL                          • $resst"
