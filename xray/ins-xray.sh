@@ -1,11 +1,5 @@
-#fi
-#echo -e "
-#"
-date
 echo ""
 domain=$(cat /root/domain)
-sleep 1
-mkdir -p /etc/xray 
 echo -e "[ ${green}INFO${NC} ] Checking... "
 apt install iptables iptables-persistent -y
 sleep 1
@@ -494,7 +488,6 @@ systemctl restart nginx
 systemctl enable runn
 systemctl restart runn
 
-sleep 1
 wget -q -O /usr/bin/auto-set "https://raw.githubusercontent.com/adammoi/xoc/main/xray/auto-set.sh" && chmod +x /usr/bin/auto-set 
 wget -q -O /usr/bin/crtxray "https://raw.githubusercontent.com/adammoi/xoc/main/xray/crt.sh" && chmod +x /usr/bin/crtxray 
 sleep 1
