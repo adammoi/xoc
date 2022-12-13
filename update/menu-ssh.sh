@@ -9,7 +9,6 @@ COLOR1="$(cat /etc/SIJA/theme/$colornow | grep -w "TEXT" | cut -d: -f2|sed 's/ /
 COLBG1="$(cat /etc/SIJA/theme/$colornow | grep -w "BG" | cut -d: -f2|sed 's/ //g')"                    
 ###########- END COLOR CODE -##########
 
-fi
 function addssh(){
 clear
 dnsdomain=$(cat /root/nsdomain)
