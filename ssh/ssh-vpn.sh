@@ -9,6 +9,7 @@ MYIP2="s/xxxxxxxxx/$MYIP/g";
 NET=$(ip -o $ANU -4 route show to default | awk '{print $5}');
 source /etc/os-release
 ver=$VERSION_ID
+domain=$(cat /root/domain)
 
 #detail nama perusahaan
 country=ID
@@ -96,15 +97,15 @@ install_ssl(){
             if [ "$isDebian" != "" ];then
                     apt-get install -y nginx certbot
                     apt install -y nginx certbot
-                    sleep 3s
+                    sleep 1s
             else
                     apt-get install -y nginx certbot
                     apt install -y nginx certbot
-                    sleep 3s
+                    sleep 1s
             fi
     else
         yum install -y nginx certbot
-        sleep 3s
+        sleep 1s
     fi
 
     systemctl stop nginx.service
@@ -113,14 +114,14 @@ install_ssl(){
             isDebian=`cat /etc/issue|grep Debian`
             if [ "$isDebian" != "" ];then
                     echo "A" | certbot certonly --renew-by-default --register-unsafely-without-email --standalone -d $domain
-                    sleep 3s
+                    sleep 1s
             else
                     echo "A" | certbot certonly --renew-by-default --register-unsafely-without-email --standalone -d $domain
-                    sleep 3s
+                    sleep 1s
             fi
     else
         echo "Y" | certbot certonly --renew-by-default --register-unsafely-without-email --standalone -d $domain
-        sleep 3s
+        sleep 1s
     fi
 }
 
@@ -165,13 +166,8 @@ screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7900 --max-clients 500
 
 # setting port ssh
 cd
-sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g'
 # /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 500' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 40000' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 51443' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 58080' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 200' /etc/ssh/sshd_config
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 sed -i 's/Port 22/Port 22/g' /etc/ssh/sshd_config
 /etc/init.d/ssh restart
 
@@ -253,15 +249,14 @@ echo; echo -n 'Creating cron to run script every minute.....(Default setting)'
 echo '.....done'
 echo; echo 'Installation has completed.'
 echo 'Config file is at /usr/local/ddos/ddos.conf'
-echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 
 # banner /etc/issue.net
 #sleep 1
-#echo -e "[ ${green}INFO$NC ] Settings banner"
-#wget -q -O /etc/issue.net "https://raw.githubusercontent.com/adammoi/xoc/main/issue.net"
-#chmod +x /etc/issue.net
-#echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
-#sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
+echo -e "[ ${green}INFO$NC ] Settings banner"
+wget -q -O /etc/issue.net "https://raw.githubusercontent.com/adammoi/xoc/main/issue.net"
+chmod +x /etc/issue.net
+echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
+sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
 
 # download script
 cd /usr/bin
