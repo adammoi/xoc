@@ -20,13 +20,9 @@ if [ "$(systemd-detect-virt)" == "openvz" ]; then
 		exit 1
 fi
 
-localip=$(hostname -I | cut -d\  -f1)
-hst=(`hostname`)
-dart=$(cat /etc/hosts | grep -w `hostname` | awk '{print $2}')
-if [[ "$hst" != "$dart" ]]; then
-echo "$localip $(hostname)"  /etc/hosts
-fi
 mkdir -p /etc/xray
+touch /etc/xray/domain
+touch /etc/xray/scdomain
 
 echo -e "[ ${tyblue}NOTES${NC} ] Before we go.. "
 sleep 1
@@ -63,22 +59,11 @@ if [ "" = "$PKG_OK" ]; then
   echo -e "[ ${tyblue}NOTES${NC} ] After rebooting"
   sleep 1
   echo -e "[ ${tyblue}NOTES${NC} ] Then run this script again"
-  echo -e "[ ${tyblue}NOTES${NC} ] Notes, Script By : YasaNata"
   echo -e "[ ${tyblue}NOTES${NC} ] if you understand then tap enter now.."
   read
 else
   echo -e "[ ${green}INFO${NC} ] Oke installed"
 fi
-
-ttet=`uname -r`
-ReqPKG="linux-headers-$ttet"
-if ! dpkg -s $ReqPKG  >/dev/null 2>&1; then
-  rm /root/setup.sh >/dev/null 2>&1 
-  exit
-else
-  clear
-fi
-
 
 secs_to_human() {
     echo "Installation time : $(( ${1} / 3600 )) hours $(( (${1} / 60) % 60 )) minute's $(( ${1} % 60 )) seconds"
@@ -109,35 +94,11 @@ echo -e "[ ${green}INFO${NC} ] Allright good ... installation file is ready"
 sleep 2
 echo -ne "[ ${green}INFO${NC} ] Check permission : "
 
-PERMISSION
-if [ -f /home/needupdate ]; then
-red "Your script need to update first !"
-exit 0
-elif [ "$res" = "Permission Accepted..." ]; then
-green "Permission Accepted!"
-else
-exit 0
-fi
-sleep 3
 
 mkdir -p /etc/SIJA
 mkdir -p /etc/SIJA/theme
 mkdir -p /var/lib/SIJA >/dev/null 2>&1
 echo "IP="  /var/lib/SIJA/ipvps.conf
-
-if [ -f "/etc/xray/domain" ]; then
-echo ""
-echo -e "[ ${green}INFO${NC} ] Script Already Installed"
-echo -ne "[ ${yell}WARNING${NC} ] Do you want to install again ? (y/n)? "
-read answer
-if [ "$answer" == "${answer#[Yy]}" ] ;then
-rm setup.sh
-sleep 3
-exit 0
-else
-clear
-fi
-fi
 
 echo ""
 wget -q https://raw.githubusercontent.com/adammoi/xoc/main/dependencies.sh;chmod +x dependencies.sh;./dependencies.sh
@@ -145,48 +106,52 @@ rm dependencies.sh
 clear
 
 yellow "Add Domain for vmess/vless/trojan dll"
-echo "-------------------------------------"
-echo "     Scipt Mod By Adam SIJA "
-echo "-------------------------------------"
-read -rp "Input your domain : " -e pp
-echo "$pp" > /root/domain
-echo "$pp" > /root/scdomain
-echo "$pp" > /etc/xray/domain
-echo "$pp" > /etc/xray/scdomain
-echo "IP=$pp" > /var/lib/SIJA/ipvps.conf
+echo " "
+read -rp "Input ur domain : " -e pp
+    if [ -z $pp ]; then
+        echo -e "
+        Nothing input for domain!
+        Then a random domain will be created"
+    else
+        echo "$pp" > /root/scdomain
+	echo "$pp" > /etc/xray/scdomain
+	echo "$pp" > /etc/xray/domain
+	echo $pp > /root/domain
+        echo "IP=$pp" > /var/lib/SIJA/ipvps.conf
+    fi
 
 #THEME RED
-cat <<EOF /etc/SIJA/theme/red
+cat <<EOF>> /etc/SIJA/theme/red
 BG : \E[40;1;41m
 TEXT : \033[0;31m
 EOF
 #THEME BLUE
-cat <<EOF /etc/SIJA/theme/blue
+cat <<EOF>> /etc/SIJA/theme/blue
 BG : \E[40;1;44m
 TEXT : \033[0;34m
 EOF
 #THEME GREEN
-cat <<EOF /etc/SIJA/theme/green
+cat <<EOF>> /etc/SIJA/theme/green
 BG : \E[40;1;42m
 TEXT : \033[0;32m
 EOF
 #THEME YELLOW
-cat <<EOF /etc/SIJA/theme/yellow
+cat <<EOF>> /etc/SIJA/theme/yellow
 BG : \E[40;1;43m
 TEXT : \033[0;33m
 EOF
 #THEME MAGENTA
-cat <<EOF /etc/SIJA/theme/magenta
+cat <<EOF>> /etc/SIJA/theme/magenta
 BG : \E[40;1;43m
 TEXT : \033[0;33m
 EOF
 #THEME CYAN
-cat <<EOF /etc/SIJA/theme/cyan
+cat <<EOF>> /etc/SIJA/theme/cyan
 BG : \E[40;1;46m
 TEXT : \033[0;36m
 EOF
 #THEME CONFIG
-cat <<EOF /etc/SIJA/theme/color.conf
+cat <<EOF>> /etc/SIJA/theme/color.conf
 blue
 EOF
 
