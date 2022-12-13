@@ -18,7 +18,7 @@ yell='\e[1;33m'
 NC='\e[0m'
 echo "Installing SSH Websocket by ADAM SIJA" | lolcat
 echo "Progress..." | lolcat
-sleep 3
+sleep 1
 cd
 
 wget -O /usr/local/bin/ws-dropbear https://raw.githubusercontent.com/adammoi/xoc/main/websocket/dropbear-ws.py
